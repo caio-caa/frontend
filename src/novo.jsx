@@ -8,29 +8,35 @@ import {
   Link,
   Container,
   InputGroup,
+  InputRightElement,
+  IconButton,
   Heading,
 } from '@chakra-ui/react';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    // Aqui você pode adicionar a lógica de autenticação
     console.log('Email:', email, 'Senha:', senha);
   };
 
   return (
-    <Box bg="blue.600" minH="100vh" display="flex" alignItems="center" justifyContent="center">
-      <Container maxW="400px">
+    <Box bg="blue.600" minH="100vh" py={10}>
+      <Container maxW="md">
         <Box
           bg="whiteAlpha.200"
           p={8}
-          borderRadius="xl"
+          borderRadius="lg"
           boxShadow="lg"
+          backdropFilter="blur(10px)"
         >
           <VStack spacing={6}>
-            <Heading color="white" fontSize="2xl" mb={2}>
+            <Heading color="white" mb={4}>
               Acesse o sistema
             </Heading>
 
@@ -43,37 +49,28 @@ const LoginPage = () => {
                 bg="whiteAlpha.100"
                 color="white"
                 _placeholder={{ color: 'whiteAlpha.700' }}
-                height="50px"
-                borderRadius="full"
-                border="none"
-                _focus={{
-                  border: "none",
-                  outline: "none",
-                  boxShadow: "none",
-                  bg: "whiteAlpha.200"
-                }}
               />
             </InputGroup>
 
             <InputGroup>
               <Input
-                type="password"
+                type={mostrarSenha ? 'text' : 'password'}
                 placeholder="Senha"
                 value={senha}
                 onChange={(e) => setSenha(e.target.value)}
                 bg="whiteAlpha.100"
                 color="white"
                 _placeholder={{ color: 'whiteAlpha.700' }}
-                height="50px"
-                borderRadius="full"
-                border="none"
-                _focus={{
-                  border: "none",
-                  outline: "none",
-                  boxShadow: "none",
-                  bg: "whiteAlpha.200"
-                }}
               />
+              <InputRightElement>
+                <IconButton
+                  icon={mostrarSenha ? <ViewOffIcon /> : <ViewIcon />}
+                  variant="ghost"
+                  onClick={() => setMostrarSenha(!mostrarSenha)}
+                  color="white"
+                  _hover={{ bg: 'whiteAlpha.200' }}
+                />
+              </InputRightElement>
             </InputGroup>
 
             <Button
@@ -82,15 +79,11 @@ const LoginPage = () => {
               color="blue.600"
               _hover={{ bg: 'whiteAlpha.900' }}
               onClick={handleSubmit}
-              height="50px"
-              borderRadius="full"
-              fontSize="md"
-              fontWeight="bold"
             >
               Login
             </Button>
 
-            <Text color="white" fontSize="sm">
+            <Text color="white">
               Não tem uma conta?{' '}
               <Link color="white" textDecoration="underline">
                 Cadastre-se

@@ -1,83 +1,93 @@
-import { useState } from "react";
-import { FaUser, FaLock } from "react-icons/fa";
-import { Link } from "react-router-dom";
-import "./Login.css";
+import React, { useState } from 'react';
+import {
+  Box,
+  Input,
+  Button,
+  VStack,
+  Text,
+  Link,
+  Container,
+  InputGroup,
+  InputRightElement,
+  IconButton,
+  Heading,
+} from '@chakra-ui/react';
 
-const Login = () => {
-  const [username, setUsername] = useState(""); 
-  const [password, setPassword] = useState(""); 
-  const [message, setMessage] = useState(""); 
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const LoginPage = () => {
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [mostrarSenha, setMostrarSenha] = useState(false);
 
-    console.log("Tentando login com:", { username, password });
-
-    try {
-      const response = await fetch("http://127.0.0.1:3333/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email: username, password: password }),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Salvar o token de autenticação no localStorage
-        localStorage.setItem("token", data.token);
-
-        setMessage("Login bem-sucedido!");
-        console.log("Token recebido:", data.token);
-
-        // Redirecionar para a página inicial
-        window.location.href = "http://localhost:5173/";
-      } else {
-        setMessage(data.error || "Erro ao fazer login");
-        console.error("Erro na resposta do servidor:", data);
-      }
-    } catch (error) {
-      setMessage("Erro na conexão com o servidor");
-      console.error("Erro:", error);
-    }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aqui você pode adicionar a lógica de autenticação
+    console.log('Email:', email, 'Senha:', senha);
   };
 
   return (
-    <div className="container">
-      <form onSubmit={handleSubmit}>
-        <h1>Acesse o sistema</h1>
-        <div className="input-field">
-          <input
-            type="text"
-            placeholder="E-mail"
-            required
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-          />
-          <FaUser className="icon" />
-        </div>
-        <div className="input-field">
-          <input
-            type="password"
-            placeholder="Senha"
-            required
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <FaLock className="icon" />
-        </div>
+    <Box bg="blue.600" minH="100vh" py={10}>
+      <Container maxW="md">
+        <Box
+          bg="whiteAlpha.200"
+          p={8}
+          borderRadius="lg"
+          boxShadow="lg"
+          backdropFilter="blur(10px)"
+        >
+          <VStack spacing={6}>
+            <Heading color="white" mb={4}>
+              Acesse o sistema
+            </Heading>
 
-        <button type="submit">Login</button>
-        {message && <p className="message">{message}</p>} 
-        <div className="signup-link">
-          <p>
-            Não tem uma conta? <Link to="/Registro">Cadastre-se</Link>
-          </p>
-        </div>
-      </form>
-    </div>
+            <InputGroup>
+              <Input
+                type="email"
+                placeholder="E-mail"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                bg="whiteAlpha.100"
+                color="white"
+                _placeholder={{ color: 'whiteAlpha.700' }}
+              />
+            </InputGroup>
+
+            <InputGroup>
+              <Input
+                type={mostrarSenha ? 'text' : 'password'}
+                placeholder="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
+                bg="whiteAlpha.100"
+                color="white"
+                _placeholder={{ color: 'whiteAlpha.700' }}
+              />
+              <InputRightElement>
+                
+              </InputRightElement>
+            </InputGroup>
+
+            <Button
+              w="100%"
+              bg="white"
+              color="blue.600"
+              _hover={{ bg: 'whiteAlpha.900' }}
+              onClick={handleSubmit}
+            >
+              Login
+            </Button>
+
+            <Text color="white">
+              Não tem uma conta?{' '}
+              <Link color="white" textDecoration="underline">
+                Cadastre-se
+              </Link>
+            </Text>
+          </VStack>
+        </Box>
+      </Container>
+    </Box>
   );
 };
 
-export default Login;
+export default LoginPage;
